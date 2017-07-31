@@ -1236,12 +1236,8 @@ void kgsl_sharedmem_free(struct kgsl_memdesc *memdesc)
 
 	if (memdesc->sgt) {
 		sg_free_table(memdesc->sgt);
-<<<<<<< HEAD
 		kvfree(memdesc->sgt);
-=======
-		kfree(memdesc->sgt);
 		memdesc->sgt = NULL;
->>>>>>> 5aea05fbb7791 (msm: kgsl: Fix memory leak for anonymous buffers)
 	}
 
 	memdesc->page_count = 0;
