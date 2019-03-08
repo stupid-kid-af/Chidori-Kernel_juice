@@ -125,7 +125,7 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
 obj-$(CONFIG_ZONE_DEVICE) += memremap.o
 obj-$(CONFIG_RSEQ) += rseq.o
 
-$(obj)/configs.o: $(obj)/config_data.h
+$(obj)/configs.o: $(obj)/config_data.gz
 
 targets += config_data config_data.gz
 $(obj)/config_data.gz: $(obj)/config_data FORCE
