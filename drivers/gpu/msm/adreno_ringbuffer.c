@@ -344,7 +344,7 @@ int adreno_ringbuffer_probe(struct adreno_device *adreno_dev)
 			priv |= KGSL_MEMDESC_PRIVILEGED;
 
 		status = kgsl_allocate_global(device, &device->scratch,
-				PAGE_SIZE, 0, priv, "scratch");
+				PAGE_SIZE, 0, KGSL_MEMDESC_RANDOM, "scratch");
 		if (status != 0)
 			return status;
 	}
