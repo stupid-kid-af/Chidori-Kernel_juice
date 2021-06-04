@@ -727,6 +727,10 @@ KBUILD_AFLAGS   += -O2
 KBUILD_LDFLAGS  += -O2
 endif
 
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += -march=armv8.2-a -mtune=kryo -mcpu=kryo
+endif
+
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
 KBUILD_CFLAGS	+= $(call cc-option,-fno-allow-store-data-races)
