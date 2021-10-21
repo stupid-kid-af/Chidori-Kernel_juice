@@ -17,6 +17,7 @@
 #include <linux/module.h>
 #include <linux/input.h>
 #include <linux/kthread.h>
+#include <linux/sched/core_ctl.h>
 
 /*
  * Sched will provide the data for every 20ms window,
