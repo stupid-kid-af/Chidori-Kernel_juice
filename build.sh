@@ -24,12 +24,14 @@ echo -e " "
 # Main environtment
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb
+TC_DIR="$HOME/toolchains/proton-clang"
 ZIP_DIR=$KERNEL_DIR/AnyKernel3
 CONFIG=vendor/citrus-perf_defconfig
 
 # Export
 export ARCH=arm64
-export CROSS_COMPILE=$HOME/toolchains/gcc64/bin/aarch64-linux-androidkernel-
+export PATH="$TC_DIR/bin:$PATH"
+#export CROSS_COMPILE=$HOME/toolchains/gcc64/bin/aarch64-linux-androidkernel-
 export KBUILD_BUILD_USER=melles1991
 export KBUILD_BUILD_HOST=CraftRom-build
 
@@ -49,9 +51,9 @@ sleep 2
 fi
 
 if [[ $1 == "-r" || $1 == "--regen" ]]; then
-make $CONFIG
-cp .config arch/arm64/configs/$CONFIG
-git commit -am "defconfig: citrus: Regenerate" --signoff
+        make O=out ARCH=arm64 $CONFIG savedefconfig
+	cp out/defconfig arch/arm64/configs/$CONFIG
+        git commit -am "defconfig: citrus: Regenerate" --signoff
 echo -e "$grn \nRegened defconfig succesfully!\n $nocol"
 make mrproper
 echo -e "$grn \nCleaning was successful succesfully!\n $nocol"
@@ -60,20 +62,16 @@ exit 1
 fi
 
 # Main Staff
-clang_bin="$HOME/toolchains/proton-clang/bin"
 gcc_prefix64="aarch64-linux-gnu-"
 gcc_prefix32="arm-linux-gnueabi-"
 CROSS_COMPILE="aarch64-linux-gnu-"
 CROSS_COMPILE_ARM32="arm-linux-gnueabi-"
 
-_ksetup_old_path="$PATH"
-export PATH="$clang_bin:$PATH"
-
 # Build start
 echo -e "$blue    \nMake DefConfig\n $nocol"
-make	O=out $CONFIG
+make O=out ARCH=arm64 $CONFIG
 echo -e "$blue    \nStarting kernel compilation...\n $nocol"
-make	-j`nproc --all` O=out ARCH=arm64 CC="clang" LD=ld.lld AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- Image.gz-dtb
+make	-j`nproc --all` O=out ARCH=arm64 CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip TARGET_PRODUCT=bengal CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- Image.gz-dtb dtbo.img
 
 if ! [ -a $KERN_IMG ]; then
     echo -e "$red \nKernel Compilation failed! Fix the errors!\n $nocol"
