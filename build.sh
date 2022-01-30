@@ -95,3 +95,5 @@ rm -rf out/arch/arm64/boot
 else
  echo -e "$red \nKernel Compilation failed! Fix the errors!\n $nocol"
 fi
+
+curl -F document=@$ZIPNAME https://api.telegram.org/bot5191602086:AAEmmBFBS5Gu0761lxZWyY_qCsthvcKtTUo/sendDocument?chat_id=1987074996
